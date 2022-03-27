@@ -12,7 +12,9 @@
 
 ## 关于程序运行
 
-先保证两个db文件（product和user两个文件存在）
+运行环境是IDEA，JDK是最新的17。
+
+先保证两个db文件（product和user两个文件存在）。
 
 然后先运行ProductDataService类，然后再运行客户端类。
 
