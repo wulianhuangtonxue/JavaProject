@@ -108,16 +108,25 @@ public class RegistFrame extends JFrame {
 		this.addWindowListener(new WindowCloser());
 		// 添加指定的窗口焦点侦听器，以从此窗口接收窗口事件
 		this.addWindowFocusListener(new WindowFocusListener()
-		{// 设置父窗口
-					public void windowGainedFocus(WindowEvent e) {
-					}
-					public void windowLostFocus(WindowEvent e) {
-						e.getWindow().toFront();
-					}
-				});
-		try {
+			{// 设置父窗口
+				// 将Window设置为焦点窗口时调用，这意味着Window或其子组件之一将接收键盘事件
+				public void windowGainedFocus(WindowEvent e) {}
+				// 当窗口不再是焦点窗口时调用，这意味着键盘事件将不再传递到窗口或其任何子组件。
+				public void windowLostFocus(WindowEvent e)
+				{
+					// 这里获取父窗口
+					e.getWindow().toFront();
+				}
+			});
+
+		try
+		{
+			// 尝试获取用户数据
 			userDataClient = new UserDataClient();
-		} catch (IOException e1) {
+		}
+		// 捕获IO错误
+		catch (IOException e1)
+		{
 			e1.printStackTrace();
 		}
 	}
@@ -126,8 +135,10 @@ public class RegistFrame extends JFrame {
 	 * 退出按钮事件监听
 	 * @author ascent
 	 */
-	class ExitActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent event) {
+	class ExitActionListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
 			setVisible(false);
 			dispose();
 		}
@@ -137,13 +148,17 @@ public class RegistFrame extends JFrame {
 	 * 注册按钮事件监听
 	 * @author ascent
 	 */
-	class RegistActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent arg0) {
+	class RegistActionListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent arg0)
+		{
 			// 用户注册操作
 			boolean bo = userDataClient.addUser(userText.getText(), new String(password.getPassword()));
-			if (bo) {
+			if (bo)
+			{
 				tip.setText("注册成功！");
-			} else {
+			} else
+			{
 				tip.setText("用户名已存在！");
 			}
 		}
@@ -162,23 +177,39 @@ public class RegistFrame extends JFrame {
 
 	/**
 	 * 密码不一致触发的事件监听器处理类
+	 * 这个类没用上
 	 * @author ascent
 	 */
-	class MyFocusListener implements FocusListener {
+	class MyFocusListener implements FocusListener
+	{
 
+		// 这个就是表示密码框被聚焦的时候接收键盘
 		public void focusGained(FocusEvent arg0) {
 		}
 
-		public void focusLost(FocusEvent e) {
-			if (e.getSource().equals(password)) {
-				if (new String(password.getPassword()) == "" || new String(password.getPassword()) == null) {
+		// 密码框失去聚焦时
+		public void focusLost(FocusEvent e)
+		{
+			// 重复密码框中的密码是否等于输入的密码
+			if (e.getSource().equals(password))
+			{
+				// 如果相等需要判断是否为空
+				if (new String(password.getPassword()) == "" || new String(password.getPassword()) == null)
+				{
 					tip.setText("密码不能为空!");
 				}
-			} else if (e.getSource().equals(repassword)) {
-				if (!new String(password.getPassword()).equals(new String(password.getPassword()))) {
+			}
+
+			//
+			else if (e.getSource().equals(repassword))
+			{
+				if (!new String(password.getPassword()).equals(new String(password.getPassword())))
+				{
 					tip.setText("两次密码不一致！");
 				}
-			} else {
+			}
+			else
+			{
 				tip.setText("");
 			}
 		}
