@@ -7,13 +7,14 @@ package com.ascent.ui;
  */
 
 
-public class Ascentsys {
-
+public class Ascentsys
+{
 	/**
 	 * 启动客户端的主方法
 	 * @param args 无
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
 		LoginFrame loginFrame = new LoginFrame();
 		loginFrame.setVisible(true);
 	}

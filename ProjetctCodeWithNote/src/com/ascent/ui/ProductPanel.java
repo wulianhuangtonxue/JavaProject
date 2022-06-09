@@ -126,11 +126,17 @@ public class ProductPanel extends JPanel
 			this.add(BorderLayout.SOUTH, bottomPanel);
 
 			// 给按钮还有类别框，产品滑动框添加对应的事件
+			// 详细
 			detailsButton.addActionListener(new DetailsActionListener());
+			// 清空
 			clearButton.addActionListener(new ClearActionListener());
+			// 退出
 			exitButton.addActionListener(new ExitActionListener());
+			// 购物车按钮
 			shoppingButton.addActionListener(new ShoppingActionListener());
+			// 类别组合框
 			categoryComboBox.addItemListener(new GoItemListener());
+			// 产品列表
 			productListBox.addListSelectionListener(new ProductListSelectionListener());
 
 			// 初始时除了退出按钮都设置为不可点击
@@ -186,7 +192,10 @@ public class ProductPanel extends JPanel
 			{
 				clearButton.setEnabled(false);
 			}
-		} catch (IOException exc) {
+		}
+		// 捕获IO异常
+		catch (IOException exc)
+		{
 			JOptionPane.showMessageDialog(this, "网络问题: " + exc, "网络问题", JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
 		} 
@@ -196,11 +205,17 @@ public class ProductPanel extends JPanel
 	 * 处理选择详细...按钮时触发的事件监听器
 	 * @author ascent
 	 */
-	class DetailsActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent event) {
+	class DetailsActionListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
+			// 从产品中获取索引
 			int index = productListBox.getSelectedIndex();
+			// 利用索引获取产品
 			Product product = (Product) productArrayList.get(index);
+			// 新建详细界面
 			ProductDetailsDialog myDetailsDialog = new ProductDetailsDialog(parentFrame, product, shoppingButton);
+			// 设置详细界面可见
 			myDetailsDialog.setVisible(true);
 		}
 	}
@@ -209,10 +224,15 @@ public class ProductPanel extends JPanel
 	 * 处理选择查看购物车按钮时触发的事件监听器
 	 * @author ascent
 	 */
-	class ShoppingActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent event) {
+	class ShoppingActionListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
+			// 新建一个购物车界面
+			// 传入的参数包含购物车的按钮
 			ShoppingCartDialog myShoppingDialog = new ShoppingCartDialog(
 					parentFrame, shoppingButton);
+			// 设置可见
 			myShoppingDialog.setVisible(true);
 		}
 	}
@@ -221,7 +241,9 @@ public class ProductPanel extends JPanel
 	 * 处理选择退出按钮时触发的事件监听器
 	 * @author ascent
 	 */
-	class ExitActionListener implements ActionListener {
+	// 调用主界面退出
+	class ExitActionListener implements ActionListener
+	{
 		public void actionPerformed(ActionEvent event) {
 			parentFrame.exit();
 		}
@@ -231,9 +253,13 @@ public class ProductPanel extends JPanel
 	 * 处理选择清空按钮时触发的事件监听器
 	 * @author ascent
 	 */
-	class ClearActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent event) {
+	class ClearActionListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
+			// 无数据
 			Object[] noData = new Object[1];
+			// 将数据清空
 			productListBox.setListData(noData);
 			categoryComboBox.setSelectedIndex(0);
 		}
@@ -243,9 +269,13 @@ public class ProductPanel extends JPanel
 	 * 处理选中分类下拉列选的选项时触发的事件监听器
 	 * @author ascent
 	 */
-	class GoItemListener implements ItemListener {
-		public void itemStateChanged(ItemEvent event) {
-			if (event.getStateChange() == ItemEvent.SELECTED) {
+	class GoItemListener implements ItemListener
+	{
+		// 重写item状态改变函数
+		public void itemStateChanged(ItemEvent event)
+		{
+			if (event.getStateChange() == ItemEvent.SELECTED)
+			{
 				populateListBox();
 			}
 		}
@@ -255,11 +285,19 @@ public class ProductPanel extends JPanel
 	 * 处理选中分类列表中选项时触发的事件监听器
 	 * @author ascent
 	 */
-	class ProductListSelectionListener implements ListSelectionListener {
-		public void valueChanged(ListSelectionEvent event) {
-			if (productListBox.isSelectionEmpty()) {
+	class ProductListSelectionListener implements ListSelectionListener
+	{
+		// 重写值是否改变函数——其实就是item是否被选取
+		public void valueChanged(ListSelectionEvent event)
+		{
+			// 如果没有被选取
+			if (productListBox.isSelectionEmpty())
+			{
+				// 详细按钮不显示
 				detailsButton.setEnabled(false);
-			} else {
+			}
+			else
+			{
 				detailsButton.setEnabled(true);
 			}
 		}

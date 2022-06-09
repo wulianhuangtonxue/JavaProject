@@ -10,7 +10,8 @@ import com.ascent.bean.User;
  * @author ascent
  * @version 1.0
  */
-public abstract class DataAccessor {
+public abstract class DataAccessor
+{
 
 	/**
 	 * 存放产品信息的HashMap/Hashtable .
@@ -44,7 +45,7 @@ public abstract class DataAccessor {
 		Set<String> categorySet = dataTable.keySet();
 		log("获得分类...");
 		ArrayList<String> categories = new ArrayList<String>(categorySet);
-		// 排序
+
 		Collections.sort(categories);
 		log("完成获得分类!\n");
 		return categories;
@@ -56,7 +57,8 @@ public abstract class DataAccessor {
 	 * @return productList 商品集合
 	 */
 	@SuppressWarnings("unchecked")
-	public ArrayList<Product> getProducts(String category) {
+	public ArrayList<Product> getProducts(String category)
+	{
 		log("获得产品集合信息， 它们属于: " + category);
 		ArrayList<Product> productList = dataTable.get(category);
 		log("该类产品数量：" + productList.size());
@@ -70,7 +72,8 @@ public abstract class DataAccessor {
 	 * 获取用户
 	 * @return userTable Key:用户名，Value:用户对象
 	 */
-	public HashMap<String,User> getUsers() {
+	public HashMap<String,User> getUsers()
+	{
 		return this.userTable;
 	}
 
@@ -78,7 +81,8 @@ public abstract class DataAccessor {
 	 * 增加新的产品
 	 * @param theProduct 被添加到购物车的商品
 	 */
-	public void addProduct(Product theProduct) {
+	public void addProduct(Product theProduct)
+	{
 		String category = theProduct.getCategory();
 		log("添加新的产品:  " + theProduct);
 		ArrayList<Product> productList = dataTable.get(category);
@@ -100,7 +104,8 @@ public abstract class DataAccessor {
 	/**
 	 * 日志方法
 	 */
-	protected void log(Object msg) {
+	protected void log(Object msg)
+	{
 		System.out.println("数据存取类　Data Accessor:  " + msg);
 	}
 }

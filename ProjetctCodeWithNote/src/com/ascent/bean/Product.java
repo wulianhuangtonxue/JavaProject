@@ -25,7 +25,8 @@ public class Product implements java.lang.Comparable, java.io.Serializable {
 	/**
 	 * 默认构造方法
 	 */
-	public Product() {
+	public Product()
+	{
 	}
 
 	/**
@@ -39,7 +40,8 @@ public class Product implements java.lang.Comparable, java.io.Serializable {
 	 * @param category 类别
 	 */
 	public Product(String productName, String cas, String structure,
-			String formula, String price, String realstock, String category) {
+			String formula, String price, String realstock, String category)
+	{
 		this.productname = productName;
 		this.structure = structure;
 		this.formula = formula;
@@ -52,107 +54,123 @@ public class Product implements java.lang.Comparable, java.io.Serializable {
 	/**
 	 * @return the cas
 	 */
-	public String getCas() {
+	public String getCas()
+	{
 		return cas;
 	}
 
 	/**
 	 * @param cas the cas to set
 	 */
-	public void setCas(String cas) {
+	public void setCas(String cas)
+	{
 		this.cas = cas;
 	}
 
 	/**
 	 * @return the category
 	 */
-	public String getCategory() {
+	public String getCategory()
+	{
 		return category;
 	}
 
 	/**
 	 * @param category the category to set
 	 */
-	public void setCategory(String category) {
+	public void setCategory(String category)
+	{
 		this.category = category;
 	}
 
 	/**
 	 * @return the formula
 	 */
-	public String getFormula() {
+	public String getFormula()
+	{
 		return formula;
 	}
 
 	/**
 	 * @param formula the formula to set
 	 */
-	public void setFormula(String formula) {
+	public void setFormula(String formula)
+	{
 		this.formula = formula;
 	}
 
 	/**
 	 * @return the price
 	 */
-	public String getPrice() {
+	public String getPrice()
+	{
 		return price;
 	}
 
 	/**
 	 * @param price the price to set
 	 */
-	public void setPrice(String price) {
+	public void setPrice(String price)
+	{
 		this.price = price;
 	}
 
 	/**
 	 * @return the productname
 	 */
-	public String getProductname() {
+	public String getProductname()
+	{
 		return productname;
 	}
 
 	/**
 	 * @param productname the productname to set
 	 */
-	public void setProductname(String productname) {
+	public void setProductname(String productname)
+	{
 		this.productname = productname;
 	}
 
 	/**
 	 * @return the realstock
 	 */
-	public String getRealstock() {
+	public String getRealstock()
+	{
 		return realstock;
 	}
 
 	/**
 	 * @param realstock the realstock to set
 	 */
-	public void setRealstock(String realstock) {
+	public void setRealstock(String realstock)
+	{
 		this.realstock = realstock;
 	}
 
 	/**
 	 * @return the structure
 	 */
-	public String getStructure() {
+	public String getStructure()
+	{
 		return structure;
 	}
 
 	/**
 	 * @param structure the structure to set
 	 */
-	public void setStructure(String structure) {
+	public void setStructure(String structure)
+	{
 		this.structure = structure;
 	}
 
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return this.getProductname() + "    CAS：" + this.getCas();
 	}
 
-	public int compareTo(Object o) {
+	public int compareTo(Object o)
+	{
 		Product product = (Product) o;
 		return this.getProductname().compareTo(product.getProductname());
 	}

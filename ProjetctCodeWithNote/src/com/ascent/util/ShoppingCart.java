@@ -1,6 +1,7 @@
 package com.ascent.util;
 
 import java.util.ArrayList;
+// 获取商品类
 import com.ascent.bean.Product;
 
 /**
@@ -8,7 +9,8 @@ import com.ascent.bean.Product;
  * @author ascent
  * @version 1.0
  */
-public class ShoppingCart {
+public class ShoppingCart
+{
 
 	/**
 	 * 存放购买商品信息
@@ -27,17 +29,23 @@ public class ShoppingCart {
 	 * 添加商品到购物车
 	 * @param myProduct
 	 */
-	public void addProduct(Product myProduct) {
+	public void addProduct(Product myProduct)
+	{
 		Product product;
 		boolean bo = false;
-		for (int i = 0; i < shoppingList.size(); i++) {
+		// 遍历已经在购物车的药品，如果有则直接退出
+		for (int i = 0; i < shoppingList.size(); i++)
+		{
 			product = shoppingList.get(i);
-			if (myProduct.getProductname().trim().equals(product.getProductname().trim())) {
+			if (myProduct.getProductname().trim().equals(product.getProductname().trim()))
+			{
 				bo = true;
 				break;
 			}
 		}
-		if (!bo) {
+		// 如果不在，则直接退出
+		if (!bo)
+		{
 			shoppingList.add(myProduct);
 		}
 	}
@@ -45,6 +53,7 @@ public class ShoppingCart {
 	/**
 	 * 清空购物车所购买商品
 	 */
+	// 清空购物车
 	public void clearProduct() {
 		shoppingList.clear();
 	}

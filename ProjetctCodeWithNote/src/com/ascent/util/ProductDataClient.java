@@ -84,7 +84,7 @@ public class ProductDataClient implements ProtocolPort {
 			throw new IOException("找不到相关类");
 		}
 
-		// 返回产品集合
+		// 返回类别集合
 		return categoryList;
 	}
 
