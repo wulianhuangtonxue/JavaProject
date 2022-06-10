@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+// 调用product类和购物车类
 import com.ascent.bean.Product;
 import com.ascent.util.ShoppingCart;
 
@@ -128,13 +129,16 @@ public class ShoppingCartDialog extends JDialog {
 	 * 处理"OK"按钮的内部类
 	 * @author ascent
 	 */
-	class OkButtonActionListener implements ActionListener {
-
-		public void actionPerformed(ActionEvent event) {
+	class OkButtonActionListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
 			Set set = textMap.keySet();
-			for (Object o : set) {
+			for (Object o : set)
+			{
 				JTextField t = (JTextField) textMap.get((String) o);
-				if ("".equals(t.getText())) {
+				if ("".equals(t.getText()))
+				{
 					tipLabel.setText("请输入数量");
 					return;
 				}

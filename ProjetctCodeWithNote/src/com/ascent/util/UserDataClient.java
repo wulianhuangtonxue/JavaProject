@@ -93,16 +93,7 @@ public class UserDataClient implements ProtocolPort {
 		}
 
 		// 捕获类未找到的异常1
-		catch (ClassNotFoundException e)
-		{
-			// 在命令行打印出错的位置及原因
-			e.printStackTrace();
-		}
 		// 捕获IO异常
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
 		// 捕获异常
 		catch (Exception e)
 		{

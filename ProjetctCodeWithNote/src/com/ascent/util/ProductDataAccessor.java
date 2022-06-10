@@ -2,6 +2,7 @@ package com.ascent.util;
 
 import java.util.*;
 import java.io.*;
+// 导入产品包和用户包
 import com.ascent.bean.Product;
 import com.ascent.bean.User;
 
@@ -10,6 +11,7 @@ import com.ascent.bean.User;
  * @author ascent
  * @version 1.0
  */
+// 继承数据存储器（抽象类）
 public class ProductDataAccessor extends DataAccessor {
 
 	// ////////////////////////////////////////////////////
@@ -53,29 +55,37 @@ public class ProductDataAccessor extends DataAccessor {
 	 * 读取数据的方法
 	 */
 	@Override
-	public void load() {
-		
+	public void load()
+	{
+		// 基类的两个成员
 		dataTable = new HashMap<String,ArrayList<Product>>();
 		userTable = new HashMap<String,User>();
 
 		ArrayList<Product> productArrayList = null;
+		// 此类允许一个应用程序进入一个令牌（tokens）
 		StringTokenizer st = null;
 
-		Product productObject = null;
-		User userObject = null;
+		Product productObject = null;	// 产品对象
+		User userObject = null;			// 用户对象
 		String line = "";
 
 		String productName, cas, structure, formula, price, realstock, category;
 		String userName, password, authority;
 
 		try {
-			log("读取文件: " + PRODUCT_FILE_NAME + "...");
+			log("读取文件: " + PRODUCT_FILE_NAME + "...");		// 输出日志
+			// 缓冲阅读对象，用来作为从文件读取的输入对象
 			BufferedReader inputFromFile1 = new BufferedReader(new FileReader(PRODUCT_FILE_NAME));
 
-			while ((line = inputFromFile1.readLine()) != null) {
-
+			// 分行读取，直至读完文件
+			while ((line = inputFromFile1.readLine()) != null)
+			{
+				// 标记 ','
 				st = new StringTokenizer(line, ",");
 
+				// nextToken用于表示获取下一个token，其实可以理解为分组
+				// trim用于去除两端的空格（空白字符）
+				// 就是读取一行的信息，其实就是一种商品的信息
 				productName = st.nextToken().trim();
 				cas = st.nextToken().trim();
 				structure = st.nextToken().trim();
@@ -84,24 +94,36 @@ public class ProductDataAccessor extends DataAccessor {
 				realstock = st.nextToken().trim();
 				category = st.nextToken().trim();
 
+				// 创建一个商品对象
 				productObject = getProductObject(productName, cas, structure,formula, price, realstock, category);
 
-				if (dataTable.containsKey(category)) {
+				// 检测已有的数据表中是否包含该类别
+				// 如果包含，则直接通过类别获取对应的产品列表
+				if (dataTable.containsKey(category))
+				{
 					productArrayList = dataTable.get(category);
-				} else {
+				}
+				// 如果不包含，则新建一个列表
+				else
+				{
 					productArrayList = new ArrayList<Product>();
+					// 将数据表中添加该类
 					dataTable.put(category, productArrayList);
 				}
+				// 列表添加当前的产品
 				productArrayList.add(productObject);
 			}
 
+			// 关闭缓冲阅读器，其实就是关闭io
 			inputFromFile1.close();
 			log("文件读取结束!");
 
+			// 然后开始读取用户信息文件
 			line = "";
 			log("读取文件: " + USER_FILE_NAME + "...");
 			BufferedReader inputFromFile2 = new BufferedReader(new FileReader(USER_FILE_NAME));
-			while ((line = inputFromFile2.readLine()) != null) {
+			while ((line = inputFromFile2.readLine()) != null)
+			{
 
 				st = new StringTokenizer(line, ",");
 
@@ -110,7 +132,9 @@ public class ProductDataAccessor extends DataAccessor {
 				authority = st.nextToken().trim();
 				userObject = new User(userName, password, Integer.parseInt(authority));
 
-				if (!userTable.containsKey(userName)) {
+				// 检测用户是否重复
+				if (!userTable.containsKey(userName))
+				{
 					userTable.put(userName, userObject);
 				}
 			}
@@ -118,10 +142,16 @@ public class ProductDataAccessor extends DataAccessor {
 			inputFromFile2.close();
 			log("文件读取结束!");
 			log("准备就绪!\n");
-		} catch (FileNotFoundException exc) {
+		}
+		// 捕获文件查找错误
+		catch (FileNotFoundException exc)
+		{
 			log("没有找到文件: " + PRODUCT_FILE_NAME + " 或 "+USER_FILE_NAME+".");
 			log(exc);
-		} catch (IOException exc) {
+		}
+		// 捕获IO错误
+		catch (IOException exc)
+		{
 			log("读取文件发生异常: " + PRODUCT_FILE_NAME+ " 或 "+USER_FILE_NAME+".");
 			log(exc);
 		}
@@ -139,25 +169,56 @@ public class ProductDataAccessor extends DataAccessor {
 	 * @return new Product(productName, cas, structure, formula, price, realstock, category);
 	 */
 	private Product getProductObject(String productName, String cas,
-			String structure, String formula, String price, String realstock, String category) {
+			String structure, String formula, String price, String realstock, String category)
+	{
 		return new Product(productName, cas, structure, formula, price, realstock, category);
 	}
 
 	/**
 	 * 保存数据
 	 */
+	// 比较可惜，只有用户文件保存
 	@Override
-	public void save(User user) {
+	public void save(User user)
+	{
 		log("读取文件: " + USER_FILE_NAME + "...");
-		try {
+		try
+		{
 			String userinfo = user.getUsername() + "," + user.getPassword() + "," + user.getAuthority();
 			RandomAccessFile fos = new RandomAccessFile(USER_FILE_NAME, "rws");
 			fos.seek(fos.length());
 			fos.write(("\n" + userinfo).getBytes());
 			fos.close();
-		} catch (FileNotFoundException e) {
+		}
+		catch (IOException e)
+		{
 			e.printStackTrace();
-		} catch (IOException e) {
+		}
+	}
+
+	/**
+	 * 用于新增产品对象的保存
+	 * @param product 产品对象
+	 */
+	@Override
+	public void save(Product product)
+	{
+		try
+		{
+			String productInfo = product.getProductname() + "," + product.getCas() + "," +
+					product.getStructure() + "," + product.getFormula() + "," + product.getPrice()
+					+ "," + product.getRealstock() + "," +product.getCategory();
+			RandomAccessFile fos = new RandomAccessFile(PRODUCT_FILE_NAME, "rws");
+			fos.seek(fos.length());
+			fos.write(("\n" + productInfo).getBytes());
+			fos.close();
+		}
+		catch(FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
 			e.printStackTrace();
 		}
 	}
@@ -166,13 +227,38 @@ public class ProductDataAccessor extends DataAccessor {
 	 * 日志方法.
 	 */
 	@Override
-	protected void log(Object msg) {
+	protected void log(Object msg)
+	{
 		System.out.println("ProductDataAccessor类: " + msg);
 	}
 
+	// 重写，将用户信息返回
 	@Override
-	public HashMap<String,User> getUsers() {
+	public HashMap<String,User> getUsers()
+	{
 		this.load();
 		return this.userTable;
+	}
+
+	// 写一个获取当前所有商品的函数
+	public HashMap<String, Product> getAllProducts()
+	{
+		// 加载文件
+		this.load();
+		HashMap<String, Product> productTable = null;
+		for(ArrayList<Product> products : dataTable.values())
+		{
+			for(Product product : products)
+			{
+				String key = product.getProductname();
+				productTable.put(key, product);
+			}
+		}
+		return productTable;
+	}
+
+	@Override
+	public void rSave() {
+
 	}
 }

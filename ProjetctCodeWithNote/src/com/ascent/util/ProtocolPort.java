@@ -27,6 +27,26 @@ public interface ProtocolPort {
 	public static final int OP_ADD_USERS = 103;
 
 	/**
+	 * 添加产品标志
+	 */
+	public static final int OP_ADD_PRODUCT = 104;
+
+	/**
+	 * 获取所有商品对象的标志
+	 */
+	public static final int OP_GET_ALL_PRODUCTS = 105;
+
+	/**
+	 * 删除商品对象的标志
+	 */
+	public static final int OP_DELETE_PRODUCT = 106;
+
+	/**
+	 * 修改商品的对象的标志
+	 */
+	public static final int OP_CHANGE = 107;
+
+	/**
 	 * 默认端口号
 	 */
 	public static final int DEFAULT_PORT = 5150;
