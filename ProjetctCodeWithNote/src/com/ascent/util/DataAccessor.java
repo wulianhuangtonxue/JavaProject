@@ -102,6 +102,13 @@ public abstract class DataAccessor
 	public abstract void save(User user);
 
 	/**
+	 * 重载save函数
+	 * 用来保存产品数据
+	 * @param product 产品对象
+	 */
+	public abstract void save(Product product);
+
+	/**
 	 * 日志方法
 	 */
 	protected void log(Object msg)

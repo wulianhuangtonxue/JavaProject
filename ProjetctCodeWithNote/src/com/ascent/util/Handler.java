@@ -65,23 +65,31 @@ public class Handler extends Thread implements ProtocolPort {
 				switch (opCode)
 				{
 					// 获取所有的产品分类名称
-				case ProtocolPort.OP_GET_PRODUCT_CATEGORIES:
-					opGetProductCategories();
-					break;
+					case ProtocolPort.OP_GET_PRODUCT_CATEGORIES:
+						opGetProductCategories();
+						break;
 					// 根据分类名称获取对应类下所有的商品
-				case ProtocolPort.OP_GET_PRODUCTS:
-					opGetProducts();
-					break;
+					case ProtocolPort.OP_GET_PRODUCTS:
+						opGetProducts();
+						break;
 					// 获取用户信息
-				case ProtocolPort.OP_GET_USERS:
-					opGetUsers();
-					break;
+					case ProtocolPort.OP_GET_USERS:
+						opGetUsers();
+						break;
 					// 注册用户
-				case ProtocolPort.OP_ADD_USERS:
-					opAddUser();
-					break;
-				default:
-					System.out.println("错误代码");
+					case ProtocolPort.OP_ADD_USERS:
+						opAddUser();
+						break;
+					// 添加商品
+					case ProtocolPort.OP_ADD_PRODUCT:
+						opAddProduct();
+						break;
+					// 获取所有的商品
+					case ProtocolPort.OP_GET_ALL_PRODUCTS:
+						opGetALLProducts();
+						break;
+					default:
+						System.out.println("错误代码");
 				}
 			}
 		} catch (IOException exc) {
@@ -145,10 +153,8 @@ public class Handler extends Thread implements ProtocolPort {
 			outputToClient.writeObject(recordingList);
 			outputToClient.flush();
 			log("发出 " + recordingList.size() + "个产品信息到客户端.");
-		} catch (IOException exc) {
-			log("发生异常:  " + exc);
-			exc.printStackTrace();
-		} catch (ClassNotFoundException exc) {
+		}
+		catch (IOException | ClassNotFoundException exc) {
 			log("发生异常:  " + exc);
 			exc.printStackTrace();
 		}
@@ -166,11 +172,44 @@ public class Handler extends Thread implements ProtocolPort {
 			User user = (User) this.inputFromClient.readObject();
 			this.myProductDataAccessor.save(user);
 		}
-		catch (IOException e)
+		catch (IOException | ClassNotFoundException e)
 		{
 			log("发生异常:  " + e);
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+		}
+	}
+
+	/**
+	 * 用于新增商品，首先新增的商品已经在客户端确认是否原来已经存在
+	 */
+	public void opAddProduct()
+	{
+		// 读取新增商品，并保存在数据文件中
+		try
+		{
+			Product product = (Product) this.inputFromClient.readObject();
+			this.myProductDataAccessor.save(product);
+		}
+		catch (IOException | ClassNotFoundException e)
+		{
+			log("发生异常:  " + e);
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 用于获取所有的商品
+	 */
+	public void opGetALLProducts()
+	{
+		try
+		{
+			HashMap<String, Product> productHashMap = this.myProductDataAccessor.getAllProducts();
+			outputToClient.writeObject(productHashMap);
+			outputToClient.flush();
+		}
+		catch(IOException e)
+		{
 			log("发生异常:  " + e);
 			e.printStackTrace();
 		}

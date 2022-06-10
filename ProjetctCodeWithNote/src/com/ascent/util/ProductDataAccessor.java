@@ -190,10 +190,35 @@ public class ProductDataAccessor extends DataAccessor {
 			fos.write(("\n" + userinfo).getBytes());
 			fos.close();
 		}
-		catch (FileNotFoundException e)
+		catch (IOException e)
 		{
 			e.printStackTrace();
-		} catch (IOException e) {
+		}
+	}
+
+	/**
+	 * 用于新增产品对象的保存
+	 * @param product 产品对象
+	 */
+	@Override
+	public void save(Product product)
+	{
+		try
+		{
+			String productInfo = product.getProductname() + "," + product.getCas() + "," +
+					product.getStructure() + "," + product.getFormula() + "," + product.getPrice()
+					+ "," + product.getRealstock() + "," +product.getCategory();
+			RandomAccessFile fos = new RandomAccessFile(PRODUCT_FILE_NAME, "rws");
+			fos.seek(fos.length());
+			fos.write(("\n" + productInfo).getBytes());
+			fos.close();
+		}
+		catch(FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
 			e.printStackTrace();
 		}
 	}
@@ -202,14 +227,33 @@ public class ProductDataAccessor extends DataAccessor {
 	 * 日志方法.
 	 */
 	@Override
-	protected void log(Object msg) {
+	protected void log(Object msg)
+	{
 		System.out.println("ProductDataAccessor类: " + msg);
 	}
 
 	// 重写，将用户信息返回
 	@Override
-	public HashMap<String,User> getUsers() {
+	public HashMap<String,User> getUsers()
+	{
 		this.load();
 		return this.userTable;
+	}
+
+	// 写一个获取当前所有商品的函数
+	public HashMap<String, Product> getAllProducts()
+	{
+		// 加载文件
+		this.load();
+		HashMap<String, Product> productTable = null;
+		for(ArrayList<Product> products : dataTable.values())
+		{
+			for(Product product : products)
+			{
+				String key = product.getProductname();
+				productTable.put(key, product);
+			}
+		}
+		return productTable;
 	}
 }
