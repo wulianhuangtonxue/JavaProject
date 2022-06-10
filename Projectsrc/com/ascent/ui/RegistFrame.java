@@ -140,6 +140,7 @@ public class RegistFrame extends JFrame {
 	/**
 	 * 密码不一致触发的事件监听器处理类
 	 * @author ascent
+	 * 这里为调用
 	 */
 	class MyFocusListener implements FocusListener {
 
