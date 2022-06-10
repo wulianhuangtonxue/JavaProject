@@ -108,6 +108,8 @@ public abstract class DataAccessor
 	 */
 	public abstract void save(Product product);
 
+	public abstract void rSave();
+
 	/**
 	 * 日志方法
 	 */

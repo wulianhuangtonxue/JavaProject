@@ -149,6 +149,18 @@ public class ProductDataClient implements ProtocolPort {
 		return productTable;
 	}
 
+	/**
+	 * 新增商品 返回是否可以新增输入的商品
+	 * 如果可以则会在文件中存入
+	 * @param productName
+	 * @param cas
+	 * @param structure
+	 * @param formula
+	 * @param price
+	 * @param realStock
+	 * @param category
+	 * @return true-新增成功，false-新增失败
+	 */
 	public boolean addProduct(String productName, String cas, String structure, String formula,
 							  String price, String realStock, String category)
 	{

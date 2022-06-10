@@ -256,4 +256,9 @@ public class ProductDataAccessor extends DataAccessor {
 		}
 		return productTable;
 	}
+
+	@Override
+	public void rSave() {
+
+	}
 }
