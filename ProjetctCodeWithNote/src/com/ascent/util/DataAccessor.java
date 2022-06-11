@@ -31,7 +31,8 @@ public abstract class DataAccessor
 	/**
 	 * 默认构造方法
 	 */
-	public DataAccessor() {
+	public DataAccessor()
+	{
 		dataTable = new HashMap<String,ArrayList<Product>>();
 		userTable = new HashMap<String,User>();
 		recentProductList = new ArrayList<Product>();
@@ -108,6 +109,9 @@ public abstract class DataAccessor
 	 */
 	public abstract void save(Product product);
 
+	/**
+	 * 重新保存函数，其实就是先将
+	 */
 	public abstract void rSave();
 
 	/**

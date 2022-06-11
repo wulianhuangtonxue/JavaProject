@@ -212,12 +212,7 @@ public class ProductDataAccessor extends DataAccessor {
 			fos.seek(fos.length());
 			fos.write(("\n" + productInfo).getBytes());
 			fos.close();
-		}
-		catch(FileNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		catch (IOException e)
+		} catch(IOException e)
 		{
 			e.printStackTrace();
 		}
@@ -257,8 +252,110 @@ public class ProductDataAccessor extends DataAccessor {
 		return productTable;
 	}
 
+	/**
+	 * 重新保存产品数据
+	 * 我们每做一次对product数据文件的修改后，需要重新保存
+	 * 这里将将数据保存在dataTable中
+	 */
 	@Override
-	public void rSave() {
+	public void rSave()
+	{
+		log("重新存储product数据文件");
+		log("清空文件内已有的数据");
+		try {
+			File file = new File(PRODUCT_FILE_NAME);
+			FileWriter fw = new FileWriter(file);
+		}
+		catch (IOException e)
+		{
+			log("数据清空失败");
+			e.printStackTrace();
+		}
+		// 遍历每个类别对应的商品列表
+		for(ArrayList<Product> productArrayList : dataTable.values())
+		{
+			// 将列表中的商品按名字排列
+			Collections.sort(productArrayList);
+			// 遍历当前列表的产品数据
+			for(Product product : productArrayList)
+			{
+				// 直接调用product的保存函数
+				save(product);
+			}
+		}
+	}
 
+	/**
+	 * 修改Product数据
+	 * @param pre 原Product
+	 * @param now 新的Product
+	 */
+	public boolean productChange(Product pre, Product now)
+	{
+		// 获取类别
+		String category = pre.getCategory();
+		ArrayList<Product> productArrayList = dataTable.get(category);		// 获取对应列表
+		Product p = null;
+		for (Product p1 : productArrayList)
+		{
+			if(p1.isEqual(pre))
+			{
+				p = p1;
+				break;
+			}
+		}
+		if(p != null && !p.isEqual(now))
+		{
+			log("可以改");
+			// 将产品先从列表中移除
+			productArrayList.remove(p);
+			category = now.getCategory();				// 获取新的类别
+			// 然后判断类别是否存在
+			if(!dataTable.containsKey(category))
+			{
+				// 不存在则新建一个新的类别
+				productArrayList = new ArrayList<Product>();
+				dataTable.put(category, productArrayList);
+			}
+			// 先获取新的列表
+			productArrayList = dataTable.get(category);
+			boolean b1 = false;
+			// 遍历看新的产品是否有相同产品
+			for(Product p2 : productArrayList)
+			{
+				if(p2.isEqual(now))
+				{
+					b1 = true;
+					break;
+				}
+			}
+			if(b1)
+			{
+				log("修改后的内容重复");
+				return false;
+			}
+			productArrayList.add(now);
+			rSave();				// 更新数据
+			log("改好了");
+			return true;
+		}
+		else
+		{
+			log("不能改，太菜了，改都不会改！");
+			return false;
+		}
+	}
+
+	/**
+	 * 删除相关产品
+	 * @param product 待删除的产品
+	 */
+	public void deleteProduct(Product product)
+	{
+		String category = product.getCategory();
+		ArrayList<Product> productArrayList = dataTable.get(category);
+		productArrayList.remove(product);
+
+		rSave();
 	}
 }

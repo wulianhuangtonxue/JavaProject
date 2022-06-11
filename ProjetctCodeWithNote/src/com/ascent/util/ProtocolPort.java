@@ -47,6 +47,11 @@ public interface ProtocolPort {
 	public static final int OP_CHANGE = 107;
 
 	/**
+	 * 查找商品对象的标志
+	 */
+	public static final int OP_LOOK_UP = 108;
+
+	/**
 	 * 默认端口号
 	 */
 	public static final int DEFAULT_PORT = 5150;

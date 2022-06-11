@@ -88,6 +88,14 @@ public class Handler extends Thread implements ProtocolPort {
 					case ProtocolPort.OP_GET_ALL_PRODUCTS:
 						opGetALLProducts();
 						break;
+					// 修改对应的商品数据
+					case ProtocolPort.OP_CHANGE:
+						opChangeProduct();
+						break;
+					// 删除对应的商品
+					case ProtocolPort.OP_DELETE_PRODUCT:
+						opDeleteProduct();
+						break;
 					default:
 						System.out.println("错误代码");
 				}
@@ -188,6 +196,22 @@ public class Handler extends Thread implements ProtocolPort {
 		try
 		{
 			Product product = (Product) this.inputFromClient.readObject();
+			String category = product.getCategory();			// 获取类别，将数据存在dataTable中
+			ArrayList<Product> productArrayList = null;			// 初始化类别下对应的商品列表
+			// 判断新增的商品类别是否存在
+			// 不存在则需要新建
+			if(!myProductDataAccessor.dataTable.containsKey(category))
+			{
+				productArrayList = new ArrayList<Product>();
+				myProductDataAccessor.dataTable.put(category, productArrayList);
+			}
+			else
+			{
+				productArrayList = myProductDataAccessor.dataTable.get(category);
+			}
+			// 将商品加入对应的数组列表中
+			productArrayList.add(product);
+
 			this.myProductDataAccessor.save(product);
 		}
 		catch (IOException | ClassNotFoundException e)
@@ -212,6 +236,44 @@ public class Handler extends Thread implements ProtocolPort {
 		{
 			log("发生异常:  " + e);
 			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 修改商品数据
+	 * 从输入流中读取
+	 */
+	public void opChangeProduct()
+	{
+		try
+		{
+			// 先获取从客户端收到的原产品和修改后新产品
+			Product pre = (Product) inputFromClient.readObject();
+			Product now = (Product) inputFromClient.readObject();
+			boolean b = myProductDataAccessor.productChange(pre, now);			// 修改数据
+			outputToClient.writeBoolean(b);
+			outputToClient.flush();
+		}
+		catch (IOException | ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+
+	public void opDeleteProduct()
+	{
+		log("删除相关产品");
+		try
+		{
+			Product product = (Product) inputFromClient.readObject();
+			myProductDataAccessor.deleteProduct(product);
+			log("删除成功");
+		}
+		catch(IOException | ClassNotFoundException e)
+		{
+			e.printStackTrace();
+			log("出现异常错误");
 		}
 	}
 
