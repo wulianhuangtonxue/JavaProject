@@ -68,3 +68,10 @@ public boolean addProduct(String productName, String cas, String structure, Stri
 	}
 ```
 
+
+
+
+
+## Update
+
+更新了增删查改，并且应该可以将数据保存在文件中。

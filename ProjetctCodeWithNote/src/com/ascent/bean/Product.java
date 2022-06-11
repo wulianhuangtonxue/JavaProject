@@ -1,5 +1,7 @@
 package com.ascent.bean;
 
+import java.util.Objects;
+
 /**
  * 实体类Product，用来描述商品的信息类
  * @author ascent
@@ -173,5 +175,18 @@ public class Product implements java.lang.Comparable, java.io.Serializable {
 	{
 		Product product = (Product) o;
 		return this.getProductname().compareTo(product.getProductname());
+	}
+
+	/**
+	 * 判断两个产品是否相等
+	 * 除了
+	 * @param p
+	 * @return 返回是否相等
+	 */
+	public boolean isEqual(Product p)
+	{
+		return productname.equals(p.productname) && cas.equals(p.cas) && structure.equals(p.structure)
+				&& formula.equals(p.formula) && price.equals(p.price) && category.equals(p.category)
+				&& realstock.equals(p.realstock);
 	}
 }

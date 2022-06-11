@@ -187,7 +187,81 @@ public class ProductDataClient implements ProtocolPort {
 		return false;
 	}
 
+	/**
+	 * 删除产品
+	 * 会先按名字判断是否有该产品，如果没有，则直接返回错误
+	 * 如果没有，就调用相关的函数，删除产品数据，并且会更新在数据文件中
+	 * @param product 要删除的产品
+	 * @return 返回删除是否成功
+	 */
+	public boolean deleteProduct(Product product)
+	{
+		try
+		{
+			HashMap<String, Product> products = getAllProducts();
+			if(!products.containsKey(product.getProductname()))
+			{
+				log("没有该产品，无法删除");
+				return false;
+			}
+			// 删除产品
+			outputToServer.writeInt(ProtocolPort.OP_DELETE_PRODUCT);
+			outputToServer.writeObject(product);
+			outputToServer.flush();
+			return true;
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		return false;
+	}
 
+	/**
+	 * 修改接口，从前端接收，修改前后的商品对象
+	 * @param pre 修改前的对象
+	 * @param now 修改后的商品
+	 * @return 返回是否修改成功
+	 */
+	public boolean changeProduct(Product pre, Product now)
+	{
+		try
+		{
+			outputToServer.writeInt(ProtocolPort.OP_CHANGE);
+			outputToServer.writeObject(pre);
+			outputToServer.writeObject(now);
+			outputToServer.flush();
+			boolean b = inputFromServer.readBoolean();
+			if(b)
+			{
+				log("修改成功");
+				return true;
+			}
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		log("修改失败");
+		return false;
+	}
+
+	/**
+	 * 查找商品函数
+	 * 从前端获取查找的商品名字
+	 * @param name 商品名字
+	 * @return 商品对象
+	 */
+	public Product findProduct(String name)
+	{
+		HashMap<String, Product> products = getAllProducts();
+		Product product = null;
+		if(products.containsKey(name))
+		{
+			product = products.get(name);
+		}
+		return product;
+	}
 
 	/**
 	 * 日志方法.
