@@ -5,6 +5,7 @@ import javax.swing.event.*;
 
 import com.ascent.bean.Product;
 import com.ascent.util.ProductDataClient;
+import com.ascent.util.Server;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -20,6 +21,7 @@ import java.io.*;
 @SuppressWarnings("serial")
 public class ProductPanel extends JPanel {
 
+	protected Client openClient;
 	protected JLabel selectionLabel;
 
 	protected JComboBox categoryComboBox;
@@ -45,7 +47,8 @@ public class ProductPanel extends JPanel {
 	protected ArrayList<Product> productArrayList;
 
 	protected ProductDataClient myDataClient;
-
+	protected Server server;
+	protected JButton client;
 	/**
 	 * 构建产品面板的构造方法
 	 * @param theParentFrame 面板的父窗体
@@ -77,6 +80,7 @@ public class ProductPanel extends JPanel {
 			clearButton = new JButton("清空");
 			exitButton = new JButton("退出");
 			shoppingButton = new JButton("查看购物车");
+			client = new JButton("客服");
 
 			bottomPanel = new JPanel();
 
@@ -90,6 +94,7 @@ public class ProductPanel extends JPanel {
 			this.add(BorderLayout.CENTER, productScrollPane);
 
 			bottomPanel.setLayout(new FlowLayout());
+			bottomPanel.add(client);
 			bottomPanel.add(shoppingButton);
 			bottomPanel.add(detailsButton);
 			bottomPanel.add(clearButton);
@@ -101,6 +106,7 @@ public class ProductPanel extends JPanel {
 			clearButton.addActionListener(new ClearActionListener());
 			exitButton.addActionListener(new ExitActionListener());
 			shoppingButton.addActionListener(new ShoppingActionListener());
+			client.addActionListener(new clientActionListener());
 			categoryComboBox.addItemListener(new GoItemListener());
 			productListBox.addListSelectionListener(new ProductListSelectionListener());
 
@@ -213,6 +219,13 @@ public class ProductPanel extends JPanel {
 			} else {
 				detailsButton.setEnabled(true);
 			}
+		}
+	}
+
+	class clientActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			openClient = new Client();
+			server = new Server();
 		}
 	}
 }

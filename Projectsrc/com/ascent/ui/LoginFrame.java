@@ -51,11 +51,12 @@ public class LoginFrame extends JFrame {
 		JLabel userLabel = new JLabel("用户帐号：");
 		JLabel passwordLabel = new JLabel("用户密码：");
 
-		userText = new JTextField(15);
-		password = new JPasswordField(15);
+		userText = new JTextField(20);
+		password = new JPasswordField(20);
 
 		JButton loginButton = new JButton("登陆");
 		JButton regist = new JButton("注册");
+		JButton account = new JButton("账号管理");
 		JButton exitButton = new JButton("退出");
 
 		loginPanel.add(userLabel);
@@ -64,10 +65,11 @@ public class LoginFrame extends JFrame {
 		loginPanel.add(new JScrollPane(password));
 		loginPanel.add(loginButton);
 		loginPanel.add(regist);
+		loginPanel.add(account);
 		loginPanel.add(exitButton);
 
 		setResizable(false);
-		setSize(260, 150);
+		setSize(300, 150);
 		setLocation(300, 100);
 
 		JPanel tipPanel = new JPanel();
@@ -82,6 +84,7 @@ public class LoginFrame extends JFrame {
 		exitButton.addActionListener(new ExitActionListener());
 		loginButton.addActionListener(new LoginActionListener());
 		regist.addActionListener(new RegistActionListener());
+		account.addActionListener(new AccountActionListener());
 		this.addWindowListener(new WindowCloser());
 		try {
 			userDataClient = new UserDataClient();
@@ -141,6 +144,16 @@ public class LoginFrame extends JFrame {
 			// 打开注册用户的窗口
 			RegistFrame registFrame = new RegistFrame();
 			registFrame.setVisible(true);
+		}
+	}
+	/**
+	 * 处理"账号"按钮事件监听的内部类.
+	 */
+	class AccountActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			// 打开注册用户的窗口
+			AccountFrame accountFrame = new AccountFrame();
+			accountFrame.setVisible(true);
 		}
 	}
 

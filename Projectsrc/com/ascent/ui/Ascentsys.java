@@ -6,7 +6,7 @@ package com.ascent.ui;
  * @version 1.0
  */
 public class Ascentsys {
-
+	public static int isAdmin = 0;//是否是管理者，1为管理者，0为普通用户
 	/**
 	 * 启动客户端的主方法
 	 * @param args 无

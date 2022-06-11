@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import com.ascent.bean.User;
 
@@ -79,6 +80,29 @@ public class UserDataClient implements ProtocolPort {
 		return userTable;
 	}
 
+	/**
+	 * 返回类别集合
+	 */
+	@SuppressWarnings("unchecked")
+	public ArrayList<String> getCategories() throws IOException {
+
+		ArrayList<String> categoryList = null;
+
+		try {
+			log("发送请求: OP_ADD_USERS");
+			outputToServer.writeInt(ProtocolPort.OP_ADD_USERS);
+			outputToServer.flush();
+
+			log("接收数据...");
+			categoryList = (ArrayList<String>) inputFromServer.readObject();
+			log("收到 " + categoryList.size() + " 类别.");
+		} catch (ClassNotFoundException exc) {
+			log("=====>>>  异常: " + exc);
+			throw new IOException("找不到相关类");
+		}
+
+		return categoryList;
+	}
 	/**
 	 * 关闭当前SocKet
 	 */
