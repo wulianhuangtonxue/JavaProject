@@ -153,13 +153,15 @@ public class RegistFrame extends JFrame {
 		public void actionPerformed(ActionEvent arg0)
 		{
 			// 用户注册操作
-			boolean bo = userDataClient.addUser(userText.getText(), new String(password.getPassword()));
-			if (bo)
-			{
-				tip.setText("注册成功！");
-			} else
-			{
-				tip.setText("用户名已存在！");
+			if(compare()){//调用比较函数，为true说明可以进行注册
+				boolean bo = userDataClient.addUser(userText.getText(), new String(password.getPassword()));
+				if (bo){
+					tip.setText("注册成功！");
+					setVisible(false);
+					dispose();
+				}
+				else
+					tip.setText("用户名已存在！");
 			}
 		}
 	}
@@ -185,33 +187,32 @@ public class RegistFrame extends JFrame {
 
 		// 这个就是表示密码框被聚焦的时候接收键盘
 		public void focusGained(FocusEvent arg0) {
+			compare();
 		}
 
 		// 密码框失去聚焦时
-		public void focusLost(FocusEvent e)
-		{
-			// 重复密码框中的密码是否等于输入的密码
-			if (e.getSource().equals(password))
-			{
-				// 如果相等需要判断是否为空
-				if (new String(password.getPassword()) == "" || new String(password.getPassword()) == null)
-				{
-					tip.setText("密码不能为空!");
-				}
+		public void focusLost(FocusEvent e) {
+			compare();
+		}
+	}
+
+	public boolean compare(){
+		String first = new String(password.getPassword());
+		String second = new String(repassword.getPassword());
+		// 重复密码框中的密码是否等于输入的密码
+		if (first.compareTo(second) == 0) {
+			// 如果相等需要判断是否为空
+			if (second == "" || second == null)
+				tip.setText("密码不能为空!");
+			else{
+				tip.setText("");
+				return true;
 			}
 
-			//
-			else if (e.getSource().equals(repassword))
-			{
-				if (!new String(password.getPassword()).equals(new String(password.getPassword())))
-				{
-					tip.setText("两次密码不一致！");
-				}
-			}
-			else
-			{
-				tip.setText("");
-			}
 		}
+		else {
+			tip.setText("两次密码不一致！");
+		}
+		return false;
 	}
 }

@@ -27,7 +27,7 @@ public class AccountFrame extends JFrame{
      * 默认构造方法，初始化用户注册窗体
      */
     public AccountFrame() {
-        this.setTitle("账号管理");
+        setTitle("账号管理");
 
         Container container = this.getContentPane();
         container.setLayout(new BorderLayout());
@@ -39,7 +39,7 @@ public class AccountFrame extends JFrame{
 
         accountText = new JTextField(15);
         password = new JPasswordField(15);
-        JButton search = new JButton("搜索");
+        JButton search = new JButton("登录");
         JButton exitButton = new JButton("退出");
 
         registPanel.add(searchAccount);
@@ -108,7 +108,6 @@ public class AccountFrame extends JFrame{
                     if(isAdmin){
                         userDataClient.closeSocKet();
                         setVisible(false);
-                        dispose();
                         AccountDetailsFrame myFrame =new AccountDetailsFrame();
                         myFrame.setVisible(true);
                     }

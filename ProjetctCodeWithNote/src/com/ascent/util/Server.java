@@ -18,13 +18,14 @@ public class Server extends JFrame {
     Vector<String> clientNames = new Vector<>();       // lstUsers 中存放的数据
     public Server(String[] args) {
         new Server();
-    }
+    }     //主方法
 
     public Server() {
         open();
         serverFrame = new ServerFrame();
     }
 
+    //打开服务器
     public void open(){
         try {
             serverSocket = new ServerSocket(localPort);
@@ -35,7 +36,7 @@ public class Server extends JFrame {
         }
     }
 
-    // TODO 接受用户连接请求的线程关联类
+    // 接受用户连接请求的线程关联类
     private class AcceptRunnable implements Runnable {
         public void run() {
             // 持续监听端口，当有新用户连接时 再开启新进程
@@ -114,7 +115,7 @@ public class Server extends JFrame {
             }
 
 
-            // TODO 更新在线用户数量 lstUsers 信息，并要求所有的用户端同步更新
+            // 更新在线用户数量 lstUsers 信息，并要求所有的用户端同步更新
             public void updateUsers() {
                 // clientNames 是 Vector<String>对象，用来存放所有用户的名字
                 clientNames.removeAllElements();
