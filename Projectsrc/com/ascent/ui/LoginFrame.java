@@ -18,6 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import com.ascent.bean.User;
+import com.ascent.util.Server;
 import com.ascent.util.UserDataClient;
 
 /**
@@ -30,6 +31,9 @@ public class LoginFrame extends JFrame {
 
 	protected JTextField userText;
 
+	public static String name = "cat";
+
+	protected Server server;
 	protected JPasswordField password;
 
 	protected JLabel tip;
@@ -116,6 +120,7 @@ public class LoginFrame extends JFrame {
 				if (userTable.containsKey(userText.getText())) {
 					User userObject = (User) userTable.get(userText.getText());
 					char[] chr = password.getPassword();
+					name=userText.getText();
 					String pwd = new String(chr);
 					if (userObject.getPassword().equals(pwd)) {
 						bo = true;
@@ -125,6 +130,7 @@ public class LoginFrame extends JFrame {
 					userDataClient.closeSocKet();
 					setVisible(false);
 					dispose();
+					server = new Server();
 					MainFrame myFrame = new MainFrame();
 					myFrame.setVisible(true);
 				} else {

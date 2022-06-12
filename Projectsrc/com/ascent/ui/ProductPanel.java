@@ -80,7 +80,7 @@ public class ProductPanel extends JPanel {
 			clearButton = new JButton("清空");
 			exitButton = new JButton("退出");
 			shoppingButton = new JButton("查看购物车");
-			client = new JButton("客服");
+			client = new JButton("联系客服");
 
 			bottomPanel = new JPanel();
 
@@ -225,7 +225,6 @@ public class ProductPanel extends JPanel {
 	class clientActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			openClient = new Client();
-			server = new Server();
 		}
 	}
 }

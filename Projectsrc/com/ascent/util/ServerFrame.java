@@ -1,4 +1,4 @@
-package com.ascent.ui;
+package com.ascent.util;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
@@ -13,7 +13,8 @@ import java.net.Socket;
 import java.util.Vector;
 
 
-public class Client extends JFrame {      //客户机窗体类
+
+public class ServerFrame extends JFrame {      //客户机窗体类
     // 界面上左中下
     private JPanel panUp = new JPanel();
     private JPanel panLeft = new JPanel();
@@ -23,7 +24,7 @@ public class Client extends JFrame {      //客户机窗体类
     // panUp 区域的子节点定义，3个标签、3个输入框、2个按钮
     private JLabel lblLocalPort3 = new JLabel("本人昵称: ");
     protected JTextField tfLocalPort3 = new JTextField(5);
-    protected JButton butStart = new JButton("连接客服");
+    protected JButton butStart = new JButton("创建聊天");
     protected JButton butStop = new JButton("结束聊天");
 
     // panLeft 区域的子节点定义，显示框、滚动条
@@ -44,32 +45,35 @@ public class Client extends JFrame {      //客户机窗体类
     PrintStream out;
     public static int localPort = 8000;     // 默认端口
     public static String localIP = "127.0.0.1";     // 默认服务器IP地址
-    public static String nickname = LoginFrame.name;      // 默认用户名
+    public static String nickname = "客服";      // 默认用户名
     public Socket socket;
     public static String msg;       // 存放本次发送的消息
-    Vector<String> clientNames = new Vector<>();
+    Vector<String> ServerNames = new Vector<>();
 
 
     // 主方法
-    public Client(String[] args) {
-        new Client();
+    public ServerFrame(String[] args) {
+        new com.ascent.util.ServerFrame();
     }
-    public Client() {
+    public ServerFrame() {
         init();
+        linkServer();
+        Thread acceptThread = new Thread(new ServerFrame.ReceiveRunnable());
+        acceptThread.start();
     }
 
     // 初始化界面
     private void init() {
-        // panUp 区域初始化：流式面板，3个标签、2个输入框，1个按钮
+        // panUp 区域初始化：流式面板，3个标签、3个输入框，2个按钮
         panUp.setLayout(new FlowLayout());
         panUp.add(lblLocalPort3);
         panUp.add(tfLocalPort3);
         tfLocalPort3.setText(nickname);
         panUp.add(butStart);
         panUp.add(butStop);
-        butStart.addActionListener(new linkServerHandlerStart());
-        butStop.addActionListener(new linkServerHandlerStop());
-        butStop.setEnabled(false);
+        butStart.addActionListener(new ServerFrame.linkServerHandlerStart());
+        butStop.addActionListener(new ServerFrame.linkServerHandlerStop());
+        butStop.setEnabled(false);      // 断开服务器按钮的初始状态应该为 不可点击，只有连接服务器之后才能点击
 
         // 添加 Left
         taMsg.setEditable(false);
@@ -88,10 +92,10 @@ public class Client extends JFrame {      //客户机窗体类
         panDown.add(lblLocalPort4);
         panDown.add(tfLocalPort4);
         panDown.setSize(100,220);
-        tfLocalPort4.addActionListener(new Client.SendHandler());
+        tfLocalPort4.addActionListener(new ServerFrame.SendHandler());
 
         // 图形界面的总体初始化 + 启动图形界面
-        this.setTitle("客户端");
+        this.setTitle("客服端");
         this.add(panUp, BorderLayout.NORTH);
         this.add(panLeft, BorderLayout.WEST);
         this.add(panMid, BorderLayout.CENTER);
@@ -102,26 +106,24 @@ public class Client extends JFrame {      //客户机窗体类
         this.setVisible(true);
     }
 
-    // 连接服务器
+    // 连接服务器监控事件
     private class linkServerHandlerStart implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            butStart.setEnabled(false);
-            butStop.setEnabled(true);
             nickname = tfLocalPort3.getText();
             linkServer();
-            Thread acceptThread = new Thread(new Client.ReceiveRunnable());
+            Thread acceptThread = new Thread(new ServerFrame.ReceiveRunnable());
             acceptThread.start();
         }
     }
 
-    // 断开服务器
+    // 断开服务器监控事件
     private class linkServerHandlerStop implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            clientNames = new Vector<>();
+            ServerNames = new Vector<>();
             updateUsers();
-            out.println("——客服【" + nickname + "】离开:bye\n");
+            out.println("——客户【" + nickname + "】离开:bye\n");
             butStart.setEnabled(true);
             butStop.setEnabled(false);
         }
@@ -131,16 +133,19 @@ public class Client extends JFrame {      //客户机窗体类
     public void linkServer() {
         try {
             socket = new Socket(localIP, localPort);
+            butStart.setEnabled(false);
+            butStop.setEnabled(true);
         } catch (Exception ex) {
             taMsg.append("==== 连接服务器失败~ ====");
         }
     }
 
+    //断开服务器
     public void stopServer(){
         taMsg.setText("");
-        clientNames = new Vector<>();
+        ServerNames = new Vector<>();
         updateUsers();
-        out.println("——客服【" + nickname + "】离开:bye\n");
+        out.println("——客户【" + nickname + "】离开:bye\n");
         butStart.setEnabled(true);
         butStop.setEnabled(false);
     }
@@ -158,10 +163,10 @@ public class Client extends JFrame {      //客户机窗体类
                     msg = in.readLine();       // 读取服务器端的发送的数据
                     // 此 if 语句的作用是：过滤服务器发送过来的 更新当前在线用户列表 请求
                     if (msg.matches(".*\\[.*\\].*")) {
-                        clientNames.removeAllElements();
+                        ServerNames.removeAllElements();
                         String[] split = msg.split(",");
                         for (String single : split) {
-                            clientNames.add(single);
+                            ServerNames.add(single);
                         }
                         updateUsers();
                         continue;
@@ -175,7 +180,7 @@ public class Client extends JFrame {      //客户机窗体类
                     msg = msg.substring(msg.lastIndexOf("：") + 1);
                     if (msg.equals(nickname)) {
                         socket.close();
-                        clientNames.remove(nickname);
+                        ServerNames.remove(nickname);
                         updateUsers();
                         break;       // 终止线程
                     }
@@ -185,7 +190,7 @@ public class Client extends JFrame {      //客户机窗体类
         }
     }
 
-    //发送消息
+    // 发送消息
     private class SendHandler implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -194,7 +199,7 @@ public class Client extends JFrame {      //客户机窗体类
         }
     }
 
-    //关闭窗口
+    // 关闭窗口
     class WindowCloser extends WindowAdapter {
         public void windowClosing(WindowEvent e) {
             stopServer();
@@ -203,10 +208,16 @@ public class Client extends JFrame {      //客户机窗体类
         }
     }
 
-
-    // 更新 "在线用户列表" 的方法
-    public void updateUsers() {
-        panMid.setBorder(new TitledBorder("在线用户(" + clientNames.size() + "个)"));
-        lstUsers.setListData(clientNames);
+    private void cutServer() {
+        out.println("——客户【" + nickname + "】离开:bye");
     }
+
+    // 更新在线用户
+    public void updateUsers() {
+        panMid.setBorder(new TitledBorder("在线用户(" + ServerNames.size() + "个)"));
+        lstUsers.setListData(ServerNames);
+    }
+
+
 }
+
