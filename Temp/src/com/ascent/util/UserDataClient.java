@@ -170,30 +170,31 @@ public class UserDataClient implements ProtocolPort
 	 * 返回一个二维对象数组，第一个存储普通用户，第二个存储管理者
 	 * @return 返回列表
 	 */
-	public ArrayList<ArrayList<User>> getTwoKindUsers()
+	public ArrayList<User> getTwoKindUsers()
 	{
 		// 新建需要返回的答案
-		ArrayList<ArrayList<User>> twoUsers = new ArrayList<ArrayList<User>>();
-		ArrayList<User> ordinaryUsers = new ArrayList<User>();				// 一般用户
-		ArrayList<User> controller = new ArrayList<User>();					// 管理者
+		ArrayList<User> twoUsers = new ArrayList<User>();
+		//ArrayList<User> ordinaryUsers = new ArrayList<User>();				// 一般用户
+		//ArrayList<User> controller = new ArrayList<User>();					// 管理者
 		HashMap<String, User> userHashMap = getUsers();						// 调用函数获取用户集
 
 		// 遍历获取到的用户对象
 		for(User user : userHashMap.values())
 		{
 			// 根据权限判断是普通还是管理者
-			if(user.getAuthority() == 0)
-			{
-				ordinaryUsers.add(user);
-			}
-			else
-			{
-				controller.add(user);
-			}
+			/**if(user.getAuthority() == 0)
+			 {
+			 ordinaryUsers.add(user);
+			 }
+			 else
+			 {
+			 controller.add(user);
+			 }**/
+			twoUsers.add(user);
 		}
 		// 对应加就行了
-		twoUsers.add(ordinaryUsers);
-		twoUsers.add(controller);
+		//twoUsers.add(ordinaryUsers);
+		//twoUsers.add(controller);
 
 		return twoUsers;
 	}

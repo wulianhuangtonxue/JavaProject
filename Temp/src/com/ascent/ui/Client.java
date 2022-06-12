@@ -51,6 +51,9 @@ public class Client extends JFrame {      //客户机窗体类
 
 
     // 主方法
+    public Client(String[] args) {
+        new Client();
+    }
     public Client() {
         init();
     }
@@ -194,9 +197,9 @@ public class Client extends JFrame {      //客户机窗体类
     //关闭窗口
     class WindowCloser extends WindowAdapter {
         public void windowClosing(WindowEvent e) {
+            stopServer();
             setVisible(false);
             dispose();
-            stopServer();
         }
     }
 

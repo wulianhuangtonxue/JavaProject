@@ -19,10 +19,12 @@ public class AccountDetailsFrame extends JFrame{
         tabbedPane = new JTabbedPane();
 
         userPanel = new AccountPanel(this);
-        tabbedPane.addTab(BorderLayout.CENTER,tabbedPane);
+        tabbedPane.addTab("ук╨е",userPanel);
+        container.add(BorderLayout.CENTER, tabbedPane);
 
         setSize(500, 400);
         setLocation(100, 100);
+
     }
 
     public void exit() {

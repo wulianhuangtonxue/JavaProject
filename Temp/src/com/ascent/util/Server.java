@@ -16,12 +16,16 @@ public class Server extends JFrame {
     ServerSocket serverSocket;      // 服务器端 Socket
     ArrayList<AcceptRunnable.Client> clients = new ArrayList<>();        // 用户连接对象数组
     Vector<String> clientNames = new Vector<>();       // lstUsers 中存放的数据
+    public Server(String[] args) {
+        new Server();
+    }     //主方法
 
     public Server() {
         open();
         serverFrame = new ServerFrame();
     }
 
+    //打开服务器
     public void open(){
         try {
             serverSocket = new ServerSocket(localPort);
@@ -111,7 +115,7 @@ public class Server extends JFrame {
             }
 
 
-            //  更新在线用户数量 lstUsers 信息，并要求所有的用户端同步更新
+            // 更新在线用户数量 lstUsers 信息，并要求所有的用户端同步更新
             public void updateUsers() {
                 // clientNames 是 Vector<String>对象，用来存放所有用户的名字
                 clientNames.removeAllElements();
