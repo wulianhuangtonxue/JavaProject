@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 // 导入用户类
 import com.ascent.bean.User;
@@ -14,7 +15,8 @@ import com.ascent.bean.User;
  * @version 1.0
  */
 // protocolPort
-public class UserDataClient implements ProtocolPort {
+public class UserDataClient implements ProtocolPort
+{
 
 	/**
 	 * socket引用
@@ -89,7 +91,6 @@ public class UserDataClient implements ProtocolPort {
 			log("接收数据...");
 			// 输入流获取对象
 			userTable = (HashMap<String,User>) inputFromServer.readObject();
-
 		}
 
 		// 捕获类未找到的异常1
@@ -162,6 +163,39 @@ public class UserDataClient implements ProtocolPort {
 
 		}
 		return false;
+	}
+
+	/**
+	 * 获取两种用户，分别为普通用户和注册用户
+	 * 返回一个二维对象数组，第一个存储普通用户，第二个存储管理者
+	 * @return
+	 */
+	public ArrayList<ArrayList<User>> getTwoKindUsers()
+	{
+		// 新建需要返回的答案
+		ArrayList<ArrayList<User>> twoUsers = new ArrayList<ArrayList<User>>();
+		ArrayList<User> ordinaryUsers = new ArrayList<User>();				// 一般用户
+		ArrayList<User> controller = new ArrayList<User>();					// 管理者
+		HashMap<String, User> userHashMap = getUsers();						// 调用函数获取用户集
+
+		// 遍历获取到的用户对象
+		for(User user : userHashMap.values())
+		{
+			// 根据权限判断是普通还是管理者
+			if(user.getAuthority() == 0)
+			{
+				ordinaryUsers.add(user);
+			}
+			else
+			{
+				controller.add(user);
+			}
+		}
+		// 对应加就行了
+		twoUsers.add(ordinaryUsers);
+		twoUsers.add(controller);
+
+		return twoUsers;
 	}
 
 }
