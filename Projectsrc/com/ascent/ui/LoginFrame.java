@@ -120,7 +120,7 @@ public class LoginFrame extends JFrame {
 				if (userTable.containsKey(userText.getText())) {
 					User userObject = (User) userTable.get(userText.getText());
 					char[] chr = password.getPassword();
-					name=userText.getText();
+					name = userText.getText();
 					String pwd = new String(chr);
 					if (userObject.getPassword().equals(pwd)) {
 						bo = true;

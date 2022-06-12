@@ -47,7 +47,7 @@ public class ProductPanel extends JPanel {
 	protected ArrayList<Product> productArrayList;
 
 	protected ProductDataClient myDataClient;
-	protected Server server;
+
 	protected JButton client;
 	/**
 	 * 构建产品面板的构造方法

@@ -22,6 +22,7 @@ import java.io.*;
 public class ProductPanel extends JPanel
 {
 
+	protected Client openClient;                //客户端
 	protected JLabel selectionLabel;			// 选择标签
 
 	protected JComboBox categoryComboBox;		// 组合框
@@ -31,6 +32,8 @@ public class ProductPanel extends JPanel
 	protected JList productListBox;				// 产品列表
 
 	protected JScrollPane productScrollPane;	// 产品移动面板
+
+	protected JButton client;                   //客户端按钮
 
 	protected JButton detailsButton;			// 详细按钮
 
@@ -92,11 +95,12 @@ public class ProductPanel extends JPanel
 			// 产品滑动面板
 			productScrollPane = new JScrollPane(productListBox);
 
-			// 新建四个按钮
+			// 新建五个按钮
 			detailsButton = new JButton("详细...");
 			clearButton = new JButton("清空");
 			exitButton = new JButton("退出");
 			shoppingButton = new JButton("查看购物车");
+			client = new JButton("联系客服");
 
 			// 底部面板
 			bottomPanel = new JPanel();
@@ -117,6 +121,7 @@ public class ProductPanel extends JPanel
 
 			// 底部面板设置为流式布局
 			bottomPanel.setLayout(new FlowLayout());
+			bottomPanel.add(client);
 			bottomPanel.add(shoppingButton);
 			bottomPanel.add(detailsButton);
 			bottomPanel.add(clearButton);
@@ -134,6 +139,8 @@ public class ProductPanel extends JPanel
 			exitButton.addActionListener(new ExitActionListener());
 			// 购物车按钮
 			shoppingButton.addActionListener(new ShoppingActionListener());
+			// 客户端按钮
+			client.addActionListener(new clientActionListener());
 			// 类别组合框
 			categoryComboBox.addItemListener(new GoItemListener());
 			// 产品列表
@@ -300,6 +307,15 @@ public class ProductPanel extends JPanel
 			{
 				detailsButton.setEnabled(true);
 			}
+		}
+	}
+	/**
+	 * 处理客户端按钮的事件监听器
+	 * @author ascent
+	 */
+	class clientActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			openClient = new Client();
 		}
 	}
 }

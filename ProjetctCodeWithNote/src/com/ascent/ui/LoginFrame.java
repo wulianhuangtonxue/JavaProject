@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 // 导入用户类
 import com.ascent.bean.User;
 // 导入用户客户端类
+import com.ascent.util.Server;
 import com.ascent.util.UserDataClient;
 
 /**
@@ -32,6 +33,10 @@ public class LoginFrame extends JFrame
 {
 
 	protected JTextField userText;				// 用户名
+
+	public static String name = "cat";          //客户默认名
+
+	protected Server server;                    //创建客服端
 
 	protected JPasswordField password;			// 密码
 
@@ -60,12 +65,13 @@ public class LoginFrame extends JFrame
 		JLabel passwordLabel = new JLabel("用户密码：");
 
 		// 用户名 和密码，长度都限制为15
-		userText = new JTextField(15);
-		password = new JPasswordField(15);
+		userText = new JTextField(20);
+		password = new JPasswordField(20);
 
-		// 新增三个按钮，分别对应登录，注册，退出
+		// 新增三个按钮，分别对应登录，注册，账号管理，退出
 		JButton loginButton = new JButton("登陆");
 		JButton regist = new JButton("注册");
+		JButton account = new JButton("账号管理");
 		JButton exitButton = new JButton("退出");
 
 		// 登录面板添加一个用户标签
@@ -76,15 +82,16 @@ public class LoginFrame extends JFrame
 		loginPanel.add(passwordLabel);
 		// 密码的输入框
 		loginPanel.add(new JScrollPane(password));
-		// 添加登录，注册，退出三个按钮
+		// 添加登录，注册，账号管理，退出三个按钮
 		loginPanel.add(loginButton);
 		loginPanel.add(regist);
+		loginPanel.add(account);
 		loginPanel.add(exitButton);
 
 		// 设置窗口大小不可改变
 		setResizable(false);
 		// 设置尺寸
-		setSize(260, 150);
+		setSize(300, 150);
 		// 设置窗口出现的位置
 		setLocation(300, 100);
 
@@ -107,6 +114,7 @@ public class LoginFrame extends JFrame
 		exitButton.addActionListener(new ExitActionListener());
 		// 类似上面添加对应的登录侦听、注册侦听
 		loginButton.addActionListener(new LoginActionListener());
+		account.addActionListener(new AccountActionListener());
 		regist.addActionListener(new RegistActionListener());
 		// 当前类添加窗口侦听
 		this.addWindowListener(new WindowCloser());
@@ -163,6 +171,8 @@ public class LoginFrame extends JFrame
 					User userObject = (User) userTable.get(userText.getText());
 					// 获取输入密码
 					char[] chr = password.getPassword();
+					// 记录用户名称
+					name = userText.getText();
 					// 将密码字符串化
 					String pwd = new String(chr);
 					// 用户的密码和输入密码是否系统
@@ -181,6 +191,8 @@ public class LoginFrame extends JFrame
 					setVisible(false);
 					// 释放当前登录界面的资源，相当于登录窗口无了
 					dispose();
+					// 客服端创建
+					server = new Server();
 					// 进入到主界面
 					MainFrame myFrame = new MainFrame();
 					// 主界面设置可见
@@ -211,6 +223,17 @@ public class LoginFrame extends JFrame
 			// 打开注册用户的窗口
 			RegistFrame registFrame = new RegistFrame();
 			registFrame.setVisible(true);				// 设置可见
+		}
+	}
+
+	/**
+	 * 处理"账号"按钮事件监听的内部类.
+	 */
+	class AccountActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			// 打开注册用户的窗口
+			AccountFrame accountFrame = new AccountFrame();
+			accountFrame.setVisible(true);
 		}
 	}
 
